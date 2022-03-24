@@ -1,0 +1,45 @@
+name: "Merge Flexlate Branches"
+description: "Merge Flexlate branches corresponding to the passed branch"
+inputs:
+  branch-name: # id of input
+    description: "Name of the feature branch to which the Flexlate branches correspond"
+    required: true
+    default: template-patches
+runs:
+  using: "composite"
+  steps:
+    - name: Check whether template branch exists
+      id: check_template_branch
+      run: |
+        echo "TEMPLATE_BRANCH_NAME $TEMPLATE_BRANCH_NAME"
+        if git rev-parse --verify "origin/$TEMPLATE_BRANCH_NAME"; then
+          echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
+          echo ::set-output name=exists::true;
+        else
+          echo "$TEMPLATE_BRANCH_NAME does not exist, must not be a Flexlate update, exiting"
+          echo ::set-output name=exists::false;
+        fi;
+      env:
+        TEMPLATE_BRANCH_NAME: flexlate-templates-${{ inputs.branch-name }}
+    - name: Merge Flexlate template branch
+      if: steps.check_template_branch.outputs.exists == 'true'
+      uses: devmasx/merge-branch@1.4.0
+      with:
+        type: now
+        from_branch: flexlate-templates-${{ inputs.branch-name }}
+        target_branch: flexlate-templates
+        github_token: ${{ github.token }}
+    - name: Merge Flexlate output branch
+      if: steps.check_template_branch.outputs.exists == 'true'
+      uses: devmasx/merge-branch@1.4.0
+      with:
+        type: now
+        from_branch: flexlate-output-${{ inputs.branch-name }}
+        target_branch: flexlate-output
+        github_token: ${{ github.token }}
+    - name: Delete merged Flexlate branches
+      if: steps.check_template_branch.outputs.exists == 'true'
+      uses: dawidd6/action-delete-branch@v3
+      with:
+        github_token: ${{ github.token }}
+        branches: flexlate-templates-${{ inputs.branch-name }},flexlate-output-${{ inputs.branch-name }}
