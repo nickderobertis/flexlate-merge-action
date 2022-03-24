@@ -2,7 +2,7 @@ name: "Merge Flexlate Branches"
 description: "Merge Flexlate branches corresponding to the passed branch"
 inputs:
   branch-name: # id of input
-    description: "Name of the feature branch to which the Flexlate branches correspond"
+    description: "The name of the base branch that the Flexlate branches were created on"
     required: true
     default: template-patches
 runs:
