@@ -21,6 +21,7 @@ runs:
         fi;
       env:
         TEMPLATE_BRANCH_NAME: flexlate-templates-${{ inputs.branch-name }}
+      shell: bash
     - name: Merge Flexlate template branch
       if: steps.check_template_branch.outputs.exists == 'true'
       uses: devmasx/merge-branch@1.4.0
