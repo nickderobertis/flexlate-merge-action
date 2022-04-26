@@ -1,0 +1,8 @@
+name: 'Merge Flexlate Branches Github Action'
+description: 'Merge Flexlate branches corresponding to the passed branch'
+runs:
+  using: composite
+  steps:
+    - run: echo hello world
+      shell: bash
+  
