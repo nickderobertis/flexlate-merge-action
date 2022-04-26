@@ -35,12 +35,12 @@ runs:
         PASSED_BRANCH_NAME: ${{ inputs.branch_name }}
     - name: Merge Flexlate Feature branches into Flexlate main branches
       uses: nickderobertis/flexlate-after-main-merge-action@alpha
-      if: ${{ steps.get_branch_name.is_conflict_resolution == false }}
+      if: ${{ !steps.get_branch_name.outputs.is_conflict_resolution }}
       with:
         branch-name: ${{ steps.get_branch_name.outputs.use_branch }}
     - name: Handle after conflict resolution PR by merging Flexlate output branch into feature branch and opening PR
       uses: nickderobertis/flexlate-after-conflict-action@alpha
-      if: ${{ steps.get_branch_name.is_conflict_resolution }}
+      if: ${{ steps.get_branch_name.outputs.is_conflict_resolution }}
       with:
         branch-name: ${{ steps.get_branch_name.outputs.use_branch == true }}
         gh_token: ${{ inputs.gh_token }}
