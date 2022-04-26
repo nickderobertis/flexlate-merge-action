@@ -37,7 +37,7 @@ runs:
       uses: nickderobertis/flexlate-after-main-merge-action@alpha
       if: ${{ !steps.get_branch_name.outputs.is_conflict_resolution }}
       with:
-        branch-name: ${{ steps.get_branch_name.outputs.use_branch }}
+        branch_name: ${{ steps.get_branch_name.outputs.use_branch }}
     - name: Handle after conflict resolution PR by merging Flexlate output branch into feature branch and opening PR
       uses: nickderobertis/flexlate-after-conflict-action@alpha
       if: ${{ steps.get_branch_name.outputs.is_conflict_resolution }}
