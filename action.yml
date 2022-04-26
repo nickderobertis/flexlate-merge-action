@@ -2,45 +2,43 @@ name: "Merge Flexlate Branches"
 description: "Merge Flexlate branches corresponding to the passed branch"
 inputs:
   branch-name: # id of input
-    description: "The name of the base branch that the Flexlate branches were created on"
+    description: "The name of the base branch that the Flexlate branches were created on or the full name of a flexlate-templates-for-conflicts branch"
     required: true
     default: template-patches
+  gh_token:
+    required: true
+    description: "The Github token to use for authentication"
 runs:
   using: "composite"
   steps:
-    - name: Check whether template branch exists
-      id: check_template_branch
-      run: |
-        echo "TEMPLATE_BRANCH_NAME $TEMPLATE_BRANCH_NAME"
-        if git rev-parse --verify "origin/$TEMPLATE_BRANCH_NAME"; then
-          echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
-          echo ::set-output name=exists::true;
-        else
-          echo "$TEMPLATE_BRANCH_NAME does not exist, must not be a Flexlate update, exiting"
-          echo ::set-output name=exists::false;
-        fi;
-      env:
-        TEMPLATE_BRANCH_NAME: flexlate-templates-${{ inputs.branch-name }}
+    - name: Get branch name
+      id: get_branch_name
       shell: bash
-    - name: Merge Flexlate template branch
-      if: steps.check_template_branch.outputs.exists == 'true'
-      uses: devmasx/merge-branch@1.4.0
+      run: |
+        check_branch_name="${PASSED_BRANCH_NAME:-$MERGED_BRANCH_NAME}"
+        if [[ "$check_branch_name" = flexlate-templates-* ]]; then
+          # Remove flexlate-templates- prefix
+          branch_suffix="${check_branch_name#flexlate-templates-}"
+          # Remove -for-conflicts suffix
+          base_branch="${branch_suffix%-for-conflicts}"
+          echo ::set-output name=use_branch::$base_branch;
+          echo ::set-output name=is_conflict_resolution::true;
+          echo "Using base branch: $base_branch"
+        else
+          echo "$check_branch_name is not a flexlate-templates branch"
+          echo ::set-output name=is_conflict_resolution::false;
+        fi
+      env:
+        MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+        PASSED_BRANCH_NAME: ${{ inputs.branch_name }}
+    - name: Merge Flexlate Feature branches into Flexlate main branches
+      uses: nickderobertis/flexlate-after-main-merge-action@alpha
+      if: ${{ !steps.get_branch_name.is_conflict_resolution }}
       with:
-        type: now
-        from_branch: flexlate-templates-${{ inputs.branch-name }}
-        target_branch: flexlate-templates
-        github_token: ${{ github.token }}
-    - name: Merge Flexlate output branch
-      if: steps.check_template_branch.outputs.exists == 'true'
-      uses: devmasx/merge-branch@1.4.0
+        branch-name: ${{ steps.get_branch_name.outputs.use_branch }}
+    - name: Handle after conflict resolution PR by merging Flexlate output branch into feature branch and opening PR
+      uses: nickderobertis/flexlate-after-conflict-action@alpha
+      if: ${{ steps.get_branch_name.is_conflict_resolution }}
       with:
-        type: now
-        from_branch: flexlate-output-${{ inputs.branch-name }}
-        target_branch: flexlate-output
-        github_token: ${{ github.token }}
-    - name: Delete merged Flexlate branches
-      if: steps.check_template_branch.outputs.exists == 'true'
-      uses: dawidd6/action-delete-branch@v3
-      with:
-        github_token: ${{ github.token }}
-        branches: flexlate-templates-${{ inputs.branch-name }},flexlate-output-${{ inputs.branch-name }}
+        branch-name: ${{ steps.get_branch_name.outputs.use_branch }}
+        gh_token: ${{ inputs.gh_token }}
