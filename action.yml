@@ -29,6 +29,7 @@ runs:
           echo "$check_branch_name is not a flexlate-templates branch"
           echo "Is conflict resolution: false"
           echo ::set-output name=is_conflict_resolution::false;
+          echo ::set-output name=use_branch::$check_branch_name;
         fi
       env:
         MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
