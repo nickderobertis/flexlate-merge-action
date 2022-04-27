@@ -1,7 +1,6 @@
-flexlate-merge-action
-# Merge Flexlate Branches Github Action
+# Flexlate After-Merge Action
 
-Merge Flexlate branches corresponding to the passed branch
+Official Flexlate Github Action to be run after merges. Merges Flexlate feature branches into main branches and handles merge conflict resolution flow.
 
 ## Inputs
 

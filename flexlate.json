@@ -16,10 +16,10 @@
       "name": "copier-github-actions-semantic-release",
       "data": {
         "repo_name": "flexlate-merge-action",
-        "full_name": "Merge Flexlate Branches Github Action",
+        "full_name": "Flexlate After-Merge Action",
         "action_type": "composite",
         "repo_username": "nickderobertis",
-        "short_description": "Merge Flexlate branches corresponding to the passed branch",
+        "short_description": "Official Flexlate Github Action to be run after merges. Merges Flexlate feature branches into main branches and handles merge conflict resolution flow.",
         "package_author": "Nick DeRobertis",
         "author_email": "derobertis.nick@gmail.com",
         "main_branch_name": "main"

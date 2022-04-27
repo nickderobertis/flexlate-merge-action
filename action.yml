@@ -1,5 +1,5 @@
-name: 'Merge Flexlate Branches Github Action'
-description: 'Merge Flexlate branches corresponding to the passed branch'
+name: 'Flexlate After-Merge Action'
+description: 'Official Flexlate Github Action to be run after merges. Merges Flexlate feature branches into main branches and handles merge conflict resolution flow.'
 runs:
   using: composite
   steps:
