@@ -4,7 +4,7 @@ Official Flexlate Github Action to be run after merges. Merges Flexlate feature 
 
 See an overview of using Flexlate on CI [here](https://nickderobertis.github.io/flexlate/core-concepts.html#ci-workflows).
 
-See the explanation about using the Flexlate After-Merge Action [here](https://nickderobertis.github.io/flexlate/tutorial/saving.html#merge-flexlate-branches-automatically-with-github-actions).
+See the explanation about using the Flexlate After-Merge Action [here](https://nickderobertis.github.io/flexlate/tutorial/ci-automation.html#flexlate-after-merge-workflow).
 
 ## Inputs
 
