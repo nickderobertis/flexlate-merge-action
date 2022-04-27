@@ -10,6 +10,7 @@ See the explanation about using the Flexlate After-Merge Action [here](https://n
 
 - `branch_name`: The name of the base branch that the Flexlate branches were created on or the full name of a flexlate-templates-for-conflicts branch
 - `gh_token`: The Github token to use for authentication
+- `main_branch`: The main branch for the repository. Defaults to `master`.
 
 ## Examples
 

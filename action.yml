@@ -8,6 +8,10 @@ inputs:
   gh_token:
     required: true
     description: "The Github token to use for authentication"
+  main_branch:
+    required: true
+    description: "The main branch for the repository"
+    default: master
 runs:
   using: "composite"
   steps:
@@ -45,3 +49,4 @@ runs:
       with:
         branch_name: ${{ steps.get_branch_name.outputs.use_branch }}
         gh_token: ${{ inputs.gh_token }}
+        main_branch: ${{ inputs.main_branch }}
