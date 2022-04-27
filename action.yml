@@ -1,7 +1,7 @@
-name: 'Flexlate After-Merge Action'
-description: 'Official Flexlate Github Action to be run after merges. Merges Flexlate feature branches into main branches and handles merge conflict resolution flow.'
+name: "Flexlate After-Merge Action"
+description: "Official Flexlate Github Action to be run after merges. Merges Flexlate feature branches into main branches and handles merge conflict resolution flow."
 inputs:
-  branch-name: # id of input
+  branch_name:
     description: "The name of the base branch that the Flexlate branches were created on or the full name of a flexlate-templates-for-conflicts branch"
     required: true
     default: template-patches
